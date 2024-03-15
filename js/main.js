@@ -18,6 +18,7 @@ $(document).ready(async function () {
     async function fetchPokemonData(offset) {
         var pokeEndpoint = `https://pokeapi.co/api/v2/pokemon/?limit=20&offset=${offset}`;
         var result = await fns.getPokemonAll(pokeEndpoint);
+        console.log(result);
         pokeCount = Math.ceil(result.count / 20); 
         const pokemonDataArray = await Promise.all(result.results.map(async function (pokemon) {
             const pokemonData = await fns.getPokemon(pokemon.name.toLowerCase());

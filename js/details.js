@@ -6,15 +6,20 @@ $(document).ready(async function () {
     const pokemonId = urlParams.get('id');
     $('#loading-spinner').show();
     $('#pokemon-image').hide();
+    if(!pokemonId){
+        window.location.href = '../pages/main.html'
+    }
 
     const pokemon = await fns.getPokemon(pokemonId);
     const pokemonDesc = await fns.getPokemonDesc(pokemon.name);
     const pokemonLoc = await fns.getPokemonLoc(pokemonId);
+    const front = pokemon?.sprites['other']?.showdown.front_default
+    const back = pokemon?.sprites['other']?.showdown.back_default
 
     const desc = pokemonDesc.flavor_text_entries[0]
-    const engDesc = desc.language.name === "en" ? desc.flavor_text : pokemonDesc.flavor_text_entries[0 + 1].flavor_text;
+    const engDesc = desc?.language?.name === "en" ? desc?.flavor_text : pokemonDesc?.flavor_text_entries[0 + 1]?.flavor_text;
 
-    const evolutionChainUrl = pokemonDesc.evolution_chain.url
+    const evolutionChainUrl = pokemonDesc?.evolution_chain.url
     const evolutionChain = await fns.getPokemonEvolutionChain(evolutionChainUrl)
     const evolve = [
         evolutionChain.chain?.species?.name,
@@ -42,7 +47,8 @@ $(document).ready(async function () {
         height: fns.height(pokemon.height),
         weight: fns.weight(pokemon.weight) +" lbs",
         location: pokemonLoc.map((location => fns.toTitleCase(location.location_area.name))).join(', '),
-
+        front: front,
+        back: back
     }
     addAdditionalDetails(pokemonDetails)
     addEvolutionChain(filteredEvolve)
@@ -65,12 +71,13 @@ async function addAdditionalDetails(details) {
     types.forEach(type => {
         const color = fns.colors[type.toLowerCase()] || 'black'; // Get color from colours object or default to black
         typeHTML += `<span class="pokemon-type" style="background-color: ${color};">${type}</span>`;
-        console.log(typeHTML);
     });
 
     $('#additional-details').html(`
+    <img src="${details.back}" style="width: 70px;">
+    <img src="${details.front}" style="width: 70px;">
     <div class="card-suit">#${details.id}</div>
-        <p class="card-text">
+        <p class="card-text mt-4">
             <span class="fw-bold">Height:</span> ${details.height} &emsp;
             <span class="fw-bold">Weight:</span> ${details.weight}
         </p>

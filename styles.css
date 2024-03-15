@@ -1,6 +1,7 @@
         body {
             font-family: 'Courier New', Courier, monospace;
             background-color: #f0f0f0;
+            background-color:firebrick;
         }
 
         .page-link {
@@ -63,14 +64,16 @@
         .btn-outline-secondary {
             background-color: #ffcc00;
             color: #333;
-            border-color: #ffcc00;
+            border-color: skyblue;
             transition: all 0.3s ease-in-out;
+            border-width: thick;
         }
 
         .btn-outline-secondary:hover {
             background-color: #ffe066;
             color: #000;
-            border-color: #ffe066;
+            border-color: skyblue;
+            border-width: thick;
         }
 
         #loading-spinner {
@@ -180,10 +183,12 @@
         .footer .social-icons a {
             font-size: 24px; /* Adjust the size of the icons */
             margin: 0 10px; /* Add some space between the icons */
-            color: #333; /* Set default color */
+            color: white; /* Set default color */
             transition: all 0.3s ease; /* Add transition effect */
         }
-
+        .footer {
+            color: white;
+        }
         .footer .social-icons a:hover {
             transform: scale(1.2); /* Increase size on hover */
             color: #ffcc00; /* Change color on hover */

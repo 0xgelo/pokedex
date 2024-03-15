@@ -1,26 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémon Details</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f0f0;
-        }
-
-        .text-center {
-            text-align: center;
-            font-size: 36px;
-            color: #E84142; /* Pokemon Red color */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Add shadow effect */
-            margin-top: 50px; /* Adjust spacing */
-        }
-
-        /* Add additional styles as needed */
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pagination - Basic Example</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<style>
+  .bs-callout {
+    margin-top: 20px;
+  }
+</style>
 </head>
 <body>
-    <h1 class="text-center">Pokémon Details</h1>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2 class="page-header">Pagination - basic example</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="bs-callout bs-callout-info">
+            <h4>Overview</h4>
+            <p><code>ngTable</code> supplies a pager to browse one "chunk" of data at a time. </p>
+            <p>Supply an initial paging configuration to the <code>NgTableParams</code> constructor call. As required, you can then change this configuration "on the fly".</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="bs-callout bs-callout-warning">
+            <h4>Got a <code>getData</code> function?</h4>
+            <p>Got your own <code>getData</code> function? Then you need to tell <code>NgTableParams</code> the total number of records that match its <code>filter</code>.</p>
+            <p>You do this by calling <code>NgTableParams.total()</code>. See <a href="https://codepen.io/christianacca/pen/mJoGPE" target="_">this codepen</a> for an example.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3>Default configuration</h3>
+      <table id="defaultTable" class="table table-condensed table-bordered table-striped">
+        <tbody>
+          <!-- Table body will be populated dynamically -->
+        </tbody>
+      </table>
+      <div id="defaultPager" class="text-center">
+        <!-- Pagination buttons will be added dynamically -->
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h3>Customized configuration</h3>
+      <table id="customTable" class="table table-condensed table-bordered table-striped">
+        <tbody>
+          <!-- Table body will be populated dynamically -->
+        </tbody>
+      </table>
+      <div id="customPager" class="text-center">
+        <!-- Pagination buttons will be added dynamically -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$(document).ready(function () {
+  var simpleList = [
+    { name: "John", age: 30 },
+    { name: "Jane", age: 25 },
+    { name: "Doe", age: 40 },
+    { name: "Smith", age: 35 },
+    { name: "Alice", age: 28 }
+  ];
+
+  function createTableRow(row) {
+    return "<tr><td>" + row.name + "</td><td>" + row.age + "</td></tr>";
+  }
+
+  function populateTable(tableId, data) {
+    var tableBody = $("#" + tableId + " tbody");
+    tableBody.empty();
+    $.each(data, function (index, row) {
+      tableBody.append(createTableRow(row));
+    });
+  }
+
+  function createPager(totalItems, itemsPerPage, currentPage, tableId) {
+    var totalPages = Math.ceil(totalItems / itemsPerPage);
+    var pagerHtml = '<ul class="pagination">';
+    if (currentPage > 1) {
+      pagerHtml += '<li><a href="#" data-page="' + (currentPage - 1) + '">Prev</a></li>';
+    }
+    for (var i = 1; i <= totalPages; i++) {
+      pagerHtml += '<li' + (i === currentPage ? ' class="active"' : '') + '><a href="#" data-page="' + i + '">' + i + '</a></li>';
+    }
+    if (currentPage < totalPages) {
+      pagerHtml += '<li><a href="#" data-page="' + (currentPage + 1) + '">Next</a></li>';
+    }
+    pagerHtml += '</ul>';
+    $("#" + tableId + "Pager").html(pagerHtml);
+  }
+
+  var defaultConfigTableParams = {};
+  populateTable("defaultTable", simpleList);
+  createPager(simpleList.length, 5, 1, "default");
+
+  var customConfigParams = createUsingFullOptions();
+  populateTable("customTable", simpleList);
+  createPager(simpleList.length, 5, 1, "custom");
+
+  function createUsingFullOptions() {
+    var initialParams = {
+      count: 5 // initial page size
+    };
+    var initialSettings = {
+      // page size buttons (right set of buttons in demo)
+      counts: [],
+      // determines the pager buttons (left set of buttons in demo)
+      paginationMaxBlocks: 13,
+      paginationMinBlocks: 2,
+      dataset: simpleList
+    };
+    return {
+      initialParams: initialParams,
+      initialSettings: initialSettings
+    };
+  }
+
+  $(document).on("click", ".pagination a", function (e) {
+    e.preventDefault();
+    var page = parseInt($(this).data("page"));
+    var tableId = $(this).closest("div[id$='Pager']").prev("table").attr("id");
+    createPager(simpleList.length, 5, page, tableId);
+  });
+});
+</script>
+
 </body>
+</html>
