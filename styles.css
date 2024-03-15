@@ -1,194 +1,210 @@
-body {
-    font-family: 'Courier New', Courier, monospace;
-}
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f0f0f0;
+        }
 
-.page-link {
-    display: inline-block;
-    margin-right: 5px; 
-}
-.pokedexLogo {
-    height: 200px;
-}
+        .page-link {
+            display: inline-block;
+            margin-right: 5px; 
+        }
 
-body {
-    background-color: #f0f0f0;
-}
+        .pokedexLogo {
+            height: 200px;
+        }
 
-.navbar-brand img {
-    height: 40px;
-    margin-right: 10px;
-}
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
 
-#card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Horizontally center the cards */
-    align-items: center; /* Vertically center the cards */
-    margin: 0 auto; /* Center the container itself */
-}
+        #card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Horizontally center the cards */
+            align-items: center; /* Vertically center the cards */
+            margin: 0 auto; /* Center the container itself */
+        }
 
-.card {
-    
-    flex: 0 0 auto;
-    /* Allow cards to shrink to fit content */
-    margin: 10px;
-    /* Optional: Add spacing between cards */
-}
+        .card {
+            flex: 0 0 auto;
+            /* Allow cards to shrink to fit content */
+            margin: 10px;
+            /* Optional: Add spacing between cards */
+        }
 
-.card {
-    background-color: #f3f3f3;
-    border: 2px solid #000;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    text-align: center;
-}
+        .card {
+            background-color: #f3f3f3;
+            border: 2px solid #000;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
 
-.card img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-}
+        .card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
 
-.card-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
-}
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
 
-.card-text {
-    font-size: 1rem;
-    color: #666;
-    margin-bottom: 20px;
-}
+        .card-text {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
 
-.btn-outline-secondary {
-    background-color: #ffcc00;
-    color: #333;
-    border-color: #ffcc00;
-    transition: all 0.3s ease-in-out;
-}
+        .btn-outline-secondary {
+            background-color: #ffcc00;
+            color: #333;
+            border-color: #ffcc00;
+            transition: all 0.3s ease-in-out;
+        }
 
-.btn-outline-secondary:hover {
-    background-color: #ffe066;
-    color: #000;
-    border-color: #ffe066;
-}
+        .btn-outline-secondary:hover {
+            background-color: #ffe066;
+            color: #000;
+            border-color: #ffe066;
+        }
 
-#loading-spinner {
-    display: none;
-}
+        #loading-spinner {
+            display: none;
+        }
 
-#loading-spinner .spinner-pokemon {
-    border: 8px solid #ffcc00;
-    border-top: 8px solid #333;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-}
+        #loading-spinner .spinner-pokemon {
+            border: 8px solid #ffcc00;
+            border-top: 8px solid #333;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
 
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
 
-    100% {
-        transform: rotate(360deg);
-    }
-}
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
-#loading-spinner .visually-hidden {
-    font-size: 0;
-    color: transparent;
-}
+        #loading-spinner .visually-hidden {
+            font-size: 0;
+            color: transparent;
+        }
 
-#card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-#pagination-container {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-}
+        #pagination-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
 
-.card:hover {
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2), 0 6px 6px rgba(0, 0, 0, 0.1);
-    transform: translateY(-4px);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
+        .card:hover {
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2), 0 6px 6px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
 
-.pagination {
-    margin-top: 20px;
-}
+        .pagination {
+            margin-top: 20px;
+        }
 
-.page-item {
-    margin-right: 5px;
-}
+        .page-item {
+            margin-right: 5px;
+        }
 
-.page-link {
-    color: #333;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 6px 12px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
+        .page-link {
+            color: #333;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 6px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
 
-.page-link:hover {
-    background-color: #f3f3f3;
-}
+        .page-link:hover {
+            background-color: #f3f3f3;
+        }
 
-.page-link:focus {
-    box-shadow: none;
-}
+        .page-link:focus {
+            box-shadow: none;
+        }
 
-.page-item.active .page-link {
-    background-color: #ffcc00;
-    border-color: #ffcc00;
-    color: #333;
-}
+        .page-item.active .page-link {
+            background-color: #ffcc00;
+            border-color: #ffcc00;
+            color: #333;
+        }
 
-.page-item.disabled .page-link {
-    color: #999;
-    pointer-events: none;
-    cursor: not-allowed;
-}
+        .page-item.disabled .page-link {
+            color: #999;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
 
-.container {
-    padding-top: 50px;
-}
-.input-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-.loading-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-#errorMsg {
-    color: red;
-    margin-right: 20px;
-}
-.pagination-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
+        .container {
+            padding-top: 50px;
+        }
 
-.footer .social-icons a {
-    font-size: 24px; /* Adjust the size of the icons */
-    margin: 0 10px; /* Add some space between the icons */
-    color: #333; /* Set default color */
-    transition: all 0.3s ease; /* Add transition effect */
-}
+        .input-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
 
-.footer .social-icons a:hover {
-    transform: scale(1.2); /* Increase size on hover */
-    color: #ffcc00; /* Change color on hover */
-}
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        #errorMsg {
+            color: red;
+            margin-right: 20px;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .footer .social-icons a {
+            font-size: 24px; /* Adjust the size of the icons */
+            margin: 0 10px; /* Add some space between the icons */
+            color: #333; /* Set default color */
+            transition: all 0.3s ease; /* Add transition effect */
+        }
+
+        .footer .social-icons a:hover {
+            transform: scale(1.2); /* Increase size on hover */
+            color: #ffcc00; /* Change color on hover */
+        }
+
+        #evolveImg:hover {
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2), 0 6px 6px rgba(0, 0, 0, 0.1);
+        }
+        .pokemon-type {
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-right: 5px;
+            font-size: 12px;
+            color: white;
+        }
+
+        .card-suit {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
