@@ -89,7 +89,7 @@ export const fns = {
     height: function(decimeters) {
         const feet = Math.floor(decimeters * 0.328084);
         const inches = Math.round((decimeters * 0.328084 - feet) * 12);
-        return `${feet}' ${inches}"`;
+        return `${feet}'${inches}"`;
     },
     weight: function(hectograms) {
         const pounds = hectograms * 0.220462;
@@ -101,4 +101,8 @@ export const fns = {
         var urlWithoutParams = window.location.origin + window.location.pathname;
         history.replaceState({}, document.title, urlWithoutParams);
     }
+}
+
+export const globalConstants = {
+    
 }

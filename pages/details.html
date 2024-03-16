@@ -18,7 +18,12 @@
 </head>
 
 <body>
-    <div class="container mt-5">
+    <div class="container">
+
+        <div class="d-flex justify-content-between container-buttons" >
+            <div id="prevx"><button class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left-long" style="font-size: 3rem;"></i></button></div>
+            <div id="nextx"><button class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-right-long" style="font-size: 3rem;"></i></button></div>
+        </div>
         <div class="d-flex justify-content-center">
             <button id="goBack" class="btn btn-outline-secondary me-2"><i class="fa-solid fa-chevron-left"></i></button>
             <button id="home" class="btn btn-outline-secondary"><i class="fa-solid fa-house"></i></i></button>
@@ -27,22 +32,21 @@
         <div class="d-flex justify-content-center align-items-center">
             <h1 class="pokemon-details-h1" style="color: white;">Pokémon Details</h1>
         </div>
-        <div class="card mx-auto" style="max-width: 500px">
+
+            <!-- Loading Spinner -->
             <div class="loading-container">
-                <div id="loading-spinner" class="text-center mb-4 mt-5">
+                <div id="loading-spinner" class="text-center mb-4">
                     <div class="spinner-pokemon" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
             </div>
+        <div class="d-flex justify-content-between">
+            
+            <div id="card-container">
 
-            <div class="card-body pokemon-card-body">
-                <img id="pokemon-image" class="card-img-top" alt="Pokémon Image" style="width: 15rem" />
-                <h5 class="card-title" id="pokemon-name"></h5>
-                <p class="card-text" id="pokemon-description"></p>
-                <!-- Additional Pokémon details -->
-                <div id="additional-details"></div>
             </div>
+            
         </div>
     </div>
     <footer class="footer">

@@ -35,23 +35,23 @@
         <nav class="pagination-container">
             <ul class="pagination">
                 <li class="">
-                    <a class="btn btn-outline-secondary me-2" aria-label="Previous" style="cursor: pointer;" id="prev">
+                    <a class="btn btn-outline-secondary me-2 prev" aria-label="Previous" style="cursor: pointer;" id="prev">
                         <span aria-hidden="true"><i class="fa-solid fa-arrow-left-long"></i></span>
                     </a>
                 </li>
                 <li class="pages">
-                    <button id="page_btn" class="btn btn-outline-secondary me-2">1</button>
+                    <button id="page_btn" class="btn btn-outline-secondary me-2 page_btn">1</button>
                 </li>
                 <li class="">
-                    <a class="btn btn-outline-secondary me-5" aria-label="Next" style="cursor: pointer;" id="next">
+                    <a class="btn btn-outline-secondary me-5 next" aria-label="Next" style="cursor: pointer;" id="next">
                         <span aria-hidden="true"><i class="fa-solid fa-arrow-right-long"></i></span>
                     </a>
                 </li>
-                <li class="d-flex justify-content-center align-items-center" me-2">
-                    <label class="fw-bold" style="color: white;"> Jump to: </label> 
+                <li class="d-flex justify-content-center align-items-center me-2">
+                    <label class="fw-bold" style="color: black;"> Jump to: </label> 
                 </li>
                 <li class="d-flex justify-content-center me-2">
-                    <input type="number" id="forward_input" style="width: 50px;" placeholder="0" min="0"> 
+                    <input type="number" id="forward_input" style="width: 50px;" placeholder="0" min="0" max="66" >
                 </li>
                 <li class="">
                     <a class="btn btn-outline-secondary me-2" aria-label="Next" style="cursor: pointer;" id="forward">
@@ -78,22 +78,38 @@
         </div>
 
         <!-- Pagination -->
+        <nav class="pagination-container">
+            <ul class="pagination">
+                <li class="">
+                    <a class="btn btn-outline-secondary me-2 prev" aria-label="Previous" style="cursor: pointer;">
+                        <span aria-hidden="true"><i class="fa-solid fa-arrow-left-long"></i></span>
+                    </a>
+                </li>
+                <li class="pages">
+                    <button id="page_btn" class="btn btn-outline-secondary me-2 page_btn">1</button>
+                </li>
+                <li class="">
+                    <a class="btn btn-outline-secondary next" style="cursor: pointer;">
+                        <span aria-hidden="true"><i class="fa-solid fa-arrow-right-long"></i></span>
+                    </a>
+                </li>
 
+            </ul>
+        </nav>
     </div>
 
     <footer class="footer">
         <div class="container text-center">
-            <p class="text" >&copy; 2024 Pokedex. All rights reserved.</p>
-            <p class="text">Designed and Developed by An.gxlo.r </p>
+            <p class="text-muted" >&copy; 2024 Pokedex. All rights reserved.</p>
+            <p class="text-muted">Designed and Developed by An.gxlo.r </p>
             <div class="social-icons">
                 <a href="https://github.com/0xgelo" target="_blank"><i class="fab fa-github"></i></a>
                 <a href="https://instagram.com/an.gxlo.roz" target="_blank"><i class="fab fa-instagram"></i></a>
                 <a href="https://twitter.com/0xgelox" target="_blank"><i class="fab fa-twitter"></i></a>
             </div>
-            <p class="text">Powered by <a href="https://pokeapi.co/" target="_blank">PokeAPI</a></p>
+            <p class="text-muted">Powered by <a href="https://pokeapi.co/" target="_blank">PokeAPI</a></p>
         </div>
     </footer>
-
     <script src="../js/main.js" type="module"></script>
 </body>
 

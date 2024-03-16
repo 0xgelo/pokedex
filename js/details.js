@@ -2,11 +2,12 @@ import { fns } from './constants.js';
 
 $(document).ready(async function () {
 
+    $('#loading-spinner').show();
+    $('#nextx').hide()
+    $('#prevx').hide()
     const urlParams = new URLSearchParams(window.location.search);
     const pokemonId = urlParams.get('id');
 
-    $('#loading-spinner').show();
-    $('#pokemon-image').hide();
     if(!pokemonId){
         window.location.href = '../pages/main.html'
     }
@@ -14,14 +15,11 @@ $(document).ready(async function () {
     const pokemon = await fns.getPokemon(pokemonId);
     const pokemonDesc = await fns.getPokemonDesc(pokemon.name);
     const pokemonLoc = await fns.getPokemonLoc(pokemonId);
-    const front = pokemon?.sprites['other']?.showdown.front_default
-    const back = pokemon?.sprites['other']?.showdown.back_default
+    const evolutionChain = await fns.getPokemonEvolutionChain(pokemonDesc?.evolution_chain.url)
 
     const desc = pokemonDesc.flavor_text_entries[0]
     const engDesc = desc?.language?.name === "en" ? desc?.flavor_text : pokemonDesc?.flavor_text_entries[0 + 1]?.flavor_text;
-
-    const evolutionChainUrl = pokemonDesc?.evolution_chain.url
-    const evolutionChain = await fns.getPokemonEvolutionChain(evolutionChainUrl)
+    
     const evolve = [
         evolutionChain.chain?.species?.name,
         evolutionChain.chain?.evolves_to[0]?.species?.name,
@@ -46,71 +44,46 @@ $(document).ready(async function () {
         type: pokemon.types.map(type => fns.toTitleCase(type.type.name)),
         color: pokemonDesc.color.name,
         height: fns.height(pokemon.height),
-        weight: fns.weight(pokemon.weight) +" lbs",
+        weight: fns.weight(pokemon.weight),
         location: pokemonLoc.map((location => fns.toTitleCase(location.location_area.name))).join(', '),
-        front: front,
-        back: back
+        front: pokemon?.sprites['other']?.showdown.front_default,
+        back: pokemon?.sprites['other']?.showdown.back_default,
+        hp: pokemon.stats[0].base_stat,
+        statAttack: pokemon.stats[1].base_stat,
+        statDefense: pokemon.stats[2].base_stat,
+        statSpeed: pokemon.stats[5].base_stat,
+        evolutionChain: filteredEvolve
     }
-    addAdditionalDetails(pokemonDetails)
-    addEvolutionChain(filteredEvolve)
-
-    $('#pokemon-name').text(fns.toTitleCase(pokemon.name));
-    $('#pokemon-description').html(`${pokemonDetails.description}`);
-    $('#pokemon-image').attr('src', pokemonDetails.img)
-    $('#pokemon-image').show()
+    
+    generateCard(pokemonDetails)
     $('#loading-spinner').hide();
-
+    $('#nextx').show()
+    $('#prevx').show()
     $('#goBack').click(async () => {
         var offset = localStorage.getItem('offset')
         var page_number = localStorage.getItem('page_number')
         window.location.href = `../pages/main.html?offset=${offset}&page=${page_number}`;
-        
     })
+
     $('#home').click(() => {
         window.location.href = '../pages/main.html'
     });
+    $('#nextx').click(() => {
+        const pokemonIdIncrement = pokemon.id += 1
+        window.location.href = `details.html?id=${pokemonIdIncrement}`;
+    })
+    $('#prevx').click(() => {
+
+        if(pokemon.id > 1){
+            const id = pokemon.id - 1
+            window.location.href = `details.html?id=${id}`;
+        }
+    })
+
+    // END OF PAGE
 })
 
-async function addAdditionalDetails(details) {
-    const types = details.type;
-    let typeHTML = '';
-    let bColor;
-    types.forEach(type => {
-        const color = fns.colors[type.toLowerCase()] || 'black'; // Get color from colours object or default to black
-        typeHTML += `<span class="pokemon-type" style="background-color: ${color};">${type}</span>`;
-        bColor = color
-    });
-
-    $('#additional-details').html(`
-    <img src="${details.back}" style="width: 70px;">
-    <img src="${details.front}" style="width: 70px;">
-    <div class="card-suit">#${details.id}</div>
-        <p class="card-text mt-4">
-            <span class="fw-bold">Height:</span> ${details.height} &emsp;
-            <span class="fw-bold">Weight:</span> ${details.weight}
-        </p>
-        <p class="card-text">
-            <span class="fw-bold">Type:</span> ${typeHTML} &emsp;
-            <span class="fw-bold">ID:</span> ${details.id}
-        </p>
-        <p class="card-text">
-            <span class="fw-bold">Abilities:</span> ${details.abilities} &emsp;
-        </p>
-        <p class="card-text">
-            <span class="fw-bold">Color:</span> ${details.color} &emsp;
-        </p>
-        <p class="card-text">
-            <span class="fw-bold">Location:</span> ${details.location ? details.location : 'Unknown'}
-        </p>
-    `);
-}
-
-
 async function addEvolutionChain(chain) {
-    console.log("chain", chain);
-    const $additionalDetailsDiv = $("#additional-details");
-    const $evolutionDiv = $("<div>");
-    $evolutionDiv.append("<h4>Evolution Chain:</h4>");
     
     for (let i = 0; i < chain.length; i++) {
         const pokemon = chain[i];
@@ -122,10 +95,10 @@ async function addEvolutionChain(chain) {
             title: pokemon.pokemon,
             width: 80
         });
-        $evolutionDiv.append($img);
+        $(".card-body").append($img);
 
         if (i !== chain.length - 1) {
-            $evolutionDiv.append("<span>→</span>");
+            $(".card-body").append("<span>→</span>");
         }
 
         // Attach click event listener directly inside the loop
@@ -134,41 +107,57 @@ async function addEvolutionChain(chain) {
             window.location.href = `details.html?id=${pokemon.id}`;
         });
     }
-    $additionalDetailsDiv.append($evolutionDiv);
-}
-
-function renderPokemonCards(pokemonDataArray) {
-    pokemonDataArray.forEach(function (pokemon) {
-        const cardHtml = generateCard(pokemon);
-        $("#card-container").append(cardHtml);
-
-        // Add event listener for "See details" button
-        $(`#see-details-${pokemon.id}`).click( async function () {
-            window.location.href = `details.html?id=${pokemon.id}`;
-        });
-    });
 }
 
 function generateCard(pokemon) {
+
     const types = pokemon.type;
     let typeHTML = '';
+    let bColor;
     types.forEach(type => {
-        const color = fns.colors[type.toLowerCase()] || 'black'; // Get color from colours object or default to black
-        typeHTML += `<span class="pokemon-type" style="background-color: ${color};">${type}</span>`;
+        const color = fns.colors[type.toLowerCase()] || 'black';
+        typeHTML += `<span class="pokemon-type" style="background-color: ${color}; font-size: 1.2em;">${type}</span>`;
+        bColor = color; 
     });
+
     const pokeName = fns.toTitleCase(pokemon.name);
-    return `
+    
+    var html = `
     <div class="col">
-        <div class="card pokemon-card" style="width: 18rem;">
-        <div class="card-suit">#${pokemon.id}</div>
+        <div class="card pokemon-card" style="width: 30rem; background-image: radial-gradient(circle at 50% 0%, ${bColor} 36%, #ffffff 36%);">
+        <p class="hp">
+        <span>HP</span>
+            ${pokemon.hp}
+        </p>
+        <div class="card-suit" style="color: white;">#${pokemon.id}</div>
             <img src="${pokemon.img}" class="card-img-top" alt="${pokeName}">
             <div class="card-body">
                 <h5 class="card-title">${pokeName}</h5>
                 &emsp; ${typeHTML} &emsp;
                 <p class="card-text mt-2">${pokemon.description}</p>
-                <button id="see-details-${pokemon.id}" class="btn btn-outline-secondary mt-3">See details</button>
-            </div>
-        </div>
+                <img src="${pokemon.back}" style="width: 70px;">
+                <img src="${pokemon.front}" style="width: 70px;">
+                <div class="stats mx-5 mt-3">
+                <div><h3 class="fw-bold">${pokemon.statAttack}</h3><p>Attack</p></div>
+                <div><h3 class="fw-bold">${pokemon.statDefense}</h3><p>Defense</p></div>
+                <div><h3 class="fw-bold">${pokemon.statSpeed}</h3><p>Speed</p></div>
+                </div>
+                <div class="stats mx-5">
+                <div><h3 class="fw-bold">${pokemon.height}</h3><p>Height</p></div>
+                <div><h3 class="fw-bold">${pokemon.weight}</h3><p>Weight</p></div>
+                <div><h3 class="fw-bold">${pokemon.color}</h3><p>Color</p></div>
+                </div>
+                <div class="stats mx-5">
+                </div>
+                <p class="card-text"><span class="fw-bold">Abilities</span> ${pokemon.abilities}</p>
+                <p class="card-text"><span class="fw-bold">Location:</span> ${pokemon.location ? pokemon.location : 'Unknown'}</p>
+    </div>
+    </div>
     </div>
     `;
+
+    addEvolutionChain(pokemon.evolutionChain)
+
+    $("#card-container").append(html);
+
 }

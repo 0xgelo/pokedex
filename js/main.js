@@ -2,10 +2,9 @@ import { fns } from './constants.js';
 
 $(document).ready(async function () {
 
-
-    // Show loading spinner
     $('#loading-spinner').show();
     $('#errorMsg').empty();
+
     const urlParams = new URLSearchParams(window.location.search);
     const pokemonOffset = Number(urlParams.get('offset'));
     const page = urlParams.get('page');
@@ -13,86 +12,82 @@ $(document).ready(async function () {
     if (pokemonOffset) {
         $('#card-container').empty();
         fetchPokemonData(pokemonOffset)
-        $('#page_btn').text(page)
+        $('.page_btn').text(page)
     }
+
     fns.clearState();
 
-    var offset = pokemonOffset ? pokemonOffset : 0;
+    var offset = pokemonOffset? pokemonOffset: 0;
     var pokeCount = 0;
-    var pgNo = Math.floor(offset / 20) + 1
+    if(offset === 0) {
+        
+    }
+    offset === 0 ? $('.page_btn').text(Math.floor(offset/20)+1) : $('.page_btn').text(Math.floor(offset/20))
 
+    fetchPokemonData(offset);
     localStorage.setItem('offset', offset);
-    localStorage.setItem('page_number', pgNo);
 
     async function fetchPokemonData(offset) {
         var pokeEndpoint = `https://pokeapi.co/api/v2/pokemon/?limit=20&offset=${offset}`;
         var result = await fns.getPokemonAll(pokeEndpoint);
         pokeCount = Math.ceil(result.count / 20);
         const pokemonDataArray = [];
-        console.log("Pokecount: ", pokeCount);
         await Promise.all(result.results.map(async function (pokemon) {
             try {
                 const pokemonData = await fns.getPokemon(pokemon.name.toLowerCase());
                 const pokemonDesc = await fns.getPokemonDesc(pokemon.name);
                 const desc = pokemonDesc.flavor_text_entries[0];
                 const engDesc = desc.language.name === "en" ? desc.flavor_text : pokemonDesc.flavor_text_entries[0 + 1].flavor_text;
-                const hp = pokemonData.stats[0].base_stat;
-                const imgSrc = pokemonData.sprites.other.dream_world.front_default;
-                const statAttack = pokemonData.stats[1].base_stat;
-                const statDefense = pokemonData.stats[2].base_stat;
-                const statSpeed = pokemonData.stats[5].base_stat;
-                console.log(engDesc);
+
                 pokemonDataArray.push({
                     id: pokemonData.id,
                     name: pokemonData.name,
                     img: pokemonData.sprites.other['official-artwork'].front_default,
                     description: engDesc.split('\n').join(' ').replace(/\f/g, ' '),
                     type: pokemonData.types.map(type => fns.toTitleCase(type.type.name)),
-                    statAttack,
-                    statDefense,
-                    statSpeed,
-                    hp,
+                    statAttack: pokemonData.stats[1].base_stat,
+                    statDefense: pokemonData.stats[2].base_stat,
+                    statSpeed: pokemonData.stats[5].base_stat,
+                    hp: pokemonData.stats[0].base_stat,
                 });
             } catch (error) {
                 console.error(`Error fetching data for ${pokemon.name}:`, error);
             }
         }));
 
-        console.log(pokemonDataArray);
         renderPokemonCards(pokemonDataArray);
         $('#loading-spinner').hide();
     }
 
-    fetchPokemonData(offset);
 
-    $('#next').click(async function () {
+
+    $('.next').click(async function () {
         $('#errorMsg').empty();
-        offset += 20;
+        offset = offset + 20;
         if (offset < pokeCount * 20) {
             $('#card-container').empty();
-            $('#page_btn').text(Math.floor(offset / 20) + 1);
+            $('.page_btn').text(Math.floor(offset / 20));
             $('#loading-spinner').show();
             await fetchPokemonData(offset);
             $('#loading-spinner').hide();
-            pgNo = $('#page_btn').text()
-            localStorage.setItem('page_number', pgNo);
+            localStorage.setItem('page_number', Math.floor(offset / 20));
         }
+        
         localStorage.setItem('offset', offset);
     });
 
 
-    $('#prev').click(async function () {
+    $('.prev').click(async function () {
         $('#errorMsg').empty();
-        if (offset > 0) {
+        if (offset > 1) {
             offset -= 20;
             $('#card-container').empty();
-            $('#page_btn').text(Math.floor(offset / 20) + 1);
+            $('.page_btn').text(Math.floor(offset / 20));
             $('#loading-spinner').show();
             await fetchPokemonData(offset);
             $('#loading-spinner').hide();
             localStorage.setItem('offset', offset);
-            pgNo = $('#page_btn').text()
-            localStorage.setItem('page_number', pgNo);
+            localStorage.setItem('page_number', Math.floor(offset / 20));
         }
     });
 
@@ -107,14 +102,14 @@ $(document).ready(async function () {
     $('#forward').on('click', async function () {
         $('#loading-spinner').show();
         const pagenumber = Number($('#forward_input').val())
+        
         if(pagenumber < 66){
-        const offset = pagenumber * 20
-        console.log(pagenumber)
-        console.log(offset)
+        offset = pagenumber * 20
+        
         $('#card-container').empty();
         fetchPokemonData(offset)
-        pgNo = pagenumber
-        localStorage.setItem('page_number', pgNo);
+        $('.page_btn').text(Math.floor(offset / 20));
+        localStorage.setItem('page_number', Math.floor(offset / 20));
         localStorage.setItem('offset', offset)
         }
 
@@ -137,30 +132,26 @@ $(document).ready(async function () {
             const pokemonDesc = await fns.getPokemonDesc(pokemonName);
             const desc = pokemonDesc.flavor_text_entries[0];
             const engDesc = desc.language.name === "en" ? desc.flavor_text : pokemonDesc.flavor_text_entries[0 + 1].flavor_text;
-            const hp = pokemonData.stats[0].base_stat;
-            const imgSrc = pokemonData.sprites.other.dream_world.front_default;
-            const statAttack = pokemonData.stats[1].base_stat;
-            const statDefense = pokemonData.stats[2].base_stat;
-            const statSpeed = pokemonData.stats[5].base_stat;
+
             const pokemonInfo = {
                 id: pokemonDesc.id,
                 name: pokemonDesc.name,
                 img: pokemonData.sprites.other['official-artwork'].front_default,
                 description: engDesc.split('\n').join(' ').replace(/\f/g, ' '),
                 type: pokemonData.types.map(type => fns.toTitleCase(type.type.name)),
-                hp,
-                statAttack,
-                statDefense,
-                statSpeed
+                hp: pokemonData.stats[0].base_stat,
+                statAttack: pokemonData.stats[1].base_stat,
+                statDefense: pokemonData.stats[2].base_stat,
+                statSpeed:pokemonData.stats[5].base_stat,
             };
 
 
             const cardHtml = generateCard(pokemonInfo);
             $('#card-container').append(cardHtml);
 
-            $(`#see-details-${pokemonInfo.id}`).click(function () {
-                window.location.href = `details.html?id=${pokemonInfo.id}`;
-            });
+            $(`#card-${pokemon.id}`).on('click', async function(){
+                window.location.href = `details.html?id=${pokemon.id}`;
+            })
             $('#loading-spinner').hide();
         }
 
@@ -174,12 +165,10 @@ function renderPokemonCards(pokemonDataArray) {
         const cardHtml = generateCard(pokemon);
         $("#card-container").append(cardHtml);
 
-
-
-        // Add event listener for "See details" button
-        $(`#see-details-${pokemon.id}`).click(async function () {
+        $(`#card-${pokemon.id}`).on('click', async function(){
             window.location.href = `details.html?id=${pokemon.id}`;
-        });
+        })
+
     });
 }
 
@@ -196,7 +185,7 @@ function generateCard(pokemon) {
     const pokeName = fns.toTitleCase(pokemon.name);
     return `
     <div class="col">
-        <div class="card pokemon-card" style="width: 18rem; background-image: radial-gradient(circle at 50% 0%, ${bColor} 36%, #ffffff 36%);">
+        <div class="card pokemon-card" style="width: 18rem; background-image: radial-gradient(circle at 50% 0%, ${bColor} 36%, #ffffff 36%); cursor:pointer;" id="card-${pokemon.id}">
         <p class="hp">
         <span>HP</span>
             ${pokemon.hp}
@@ -221,10 +210,10 @@ function generateCard(pokemon) {
                 <p>Speed</p>
                 </div>
             </div>
-                <button id="see-details-${pokemon.id}" class="btn btn-outline-secondary mt-3">See details</button>
+            <div class="card-footer" style="background-color: ${bColor}; height: 10px;"></div> 
             </div>
         </div>
+        
     </div>
     `;
 }
-
