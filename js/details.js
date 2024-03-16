@@ -4,6 +4,7 @@ $(document).ready(async function () {
 
     const urlParams = new URLSearchParams(window.location.search);
     const pokemonId = urlParams.get('id');
+
     $('#loading-spinner').show();
     $('#pokemon-image').hide();
     if(!pokemonId){
@@ -59,18 +60,25 @@ $(document).ready(async function () {
     $('#pokemon-image').show()
     $('#loading-spinner').hide();
 
-    $('#goBack').click(() => {
-
-        history.back();
+    $('#goBack').click(async () => {
+        var offset = localStorage.getItem('offset')
+        var page_number = localStorage.getItem('page_number')
+        window.location.href = `../pages/main.html?offset=${offset}&page=${page_number}`;
+        
     })
+    $('#home').click(() => {
+        window.location.href = '../pages/main.html'
+    });
 })
 
 async function addAdditionalDetails(details) {
     const types = details.type;
     let typeHTML = '';
+    let bColor;
     types.forEach(type => {
         const color = fns.colors[type.toLowerCase()] || 'black'; // Get color from colours object or default to black
         typeHTML += `<span class="pokemon-type" style="background-color: ${color};">${type}</span>`;
+        bColor = color
     });
 
     $('#additional-details').html(`
@@ -129,3 +137,38 @@ async function addEvolutionChain(chain) {
     $additionalDetailsDiv.append($evolutionDiv);
 }
 
+function renderPokemonCards(pokemonDataArray) {
+    pokemonDataArray.forEach(function (pokemon) {
+        const cardHtml = generateCard(pokemon);
+        $("#card-container").append(cardHtml);
+
+        // Add event listener for "See details" button
+        $(`#see-details-${pokemon.id}`).click( async function () {
+            window.location.href = `details.html?id=${pokemon.id}`;
+        });
+    });
+}
+
+function generateCard(pokemon) {
+    const types = pokemon.type;
+    let typeHTML = '';
+    types.forEach(type => {
+        const color = fns.colors[type.toLowerCase()] || 'black'; // Get color from colours object or default to black
+        typeHTML += `<span class="pokemon-type" style="background-color: ${color};">${type}</span>`;
+    });
+    const pokeName = fns.toTitleCase(pokemon.name);
+    return `
+    <div class="col">
+        <div class="card pokemon-card" style="width: 18rem;">
+        <div class="card-suit">#${pokemon.id}</div>
+            <img src="${pokemon.img}" class="card-img-top" alt="${pokeName}">
+            <div class="card-body">
+                <h5 class="card-title">${pokeName}</h5>
+                &emsp; ${typeHTML} &emsp;
+                <p class="card-text mt-2">${pokemon.description}</p>
+                <button id="see-details-${pokemon.id}" class="btn btn-outline-secondary mt-3">See details</button>
+            </div>
+        </div>
+    </div>
+    `;
+}

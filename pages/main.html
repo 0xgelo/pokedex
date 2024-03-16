@@ -34,19 +34,31 @@
 
         <nav class="pagination-container">
             <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" aria-label="Previous" style="cursor: pointer;" id="prev">
-                        <span aria-hidden="true">&lt;</span>
+                <li class="">
+                    <a class="btn btn-outline-secondary me-2" aria-label="Previous" style="cursor: pointer;" id="prev">
+                        <span aria-hidden="true"><i class="fa-solid fa-arrow-left-long"></i></span>
                     </a>
                 </li>
-                <li class="page-item pages">
-                    <button id="page_btn" class="page-link">1</button>
+                <li class="pages">
+                    <button id="page_btn" class="btn btn-outline-secondary me-2">1</button>
                 </li>
-                <li class="page-item">
-                    <a class="page-link" aria-label="Next" style="cursor: pointer;" id="next">
-                        <span aria-hidden="true">&gt;</span>
+                <li class="">
+                    <a class="btn btn-outline-secondary me-5" aria-label="Next" style="cursor: pointer;" id="next">
+                        <span aria-hidden="true"><i class="fa-solid fa-arrow-right-long"></i></span>
                     </a>
                 </li>
+                <li class="d-flex justify-content-center align-items-center" me-2">
+                    <label class="fw-bold" style="color: white;"> Jump to: </label> 
+                </li>
+                <li class="d-flex justify-content-center me-2">
+                    <input type="number" id="forward_input" style="width: 50px;" placeholder="0" min="0"> 
+                </li>
+                <li class="">
+                    <a class="btn btn-outline-secondary me-2" aria-label="Next" style="cursor: pointer;" id="forward">
+                        <span aria-hidden="true"><i class="fa-solid fa-forward"></i></span>
+                    </a>
+                </li>
+
             </ul>
         </nav>
 

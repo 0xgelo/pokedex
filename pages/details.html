@@ -19,9 +19,13 @@
 
 <body>
     <div class="container mt-5">
-        <button id="goBack" class="btn btn-outline-secondary"><i class="fa-solid fa-chevron-left"></i></button>
         <div class="d-flex justify-content-center">
-            <h1 class="text-center fw-bold" style="color: white;">Pokémon Details</h1>
+            <button id="goBack" class="btn btn-outline-secondary me-2"><i class="fa-solid fa-chevron-left"></i></button>
+            <button id="home" class="btn btn-outline-secondary"><i class="fa-solid fa-house"></i></i></button>
+        </div>
+        <br>
+        <div class="d-flex justify-content-center align-items-center">
+            <h1 class="pokemon-details-h1" style="color: white;">Pokémon Details</h1>
         </div>
         <div class="card mx-auto" style="max-width: 500px">
             <div class="loading-container">
@@ -32,7 +36,7 @@
                 </div>
             </div>
 
-            <div class="card-body">
+            <div class="card-body pokemon-card-body">
                 <img id="pokemon-image" class="card-img-top" alt="Pokémon Image" style="width: 15rem" />
                 <h5 class="card-title" id="pokemon-name"></h5>
                 <p class="card-text" id="pokemon-description"></p>
