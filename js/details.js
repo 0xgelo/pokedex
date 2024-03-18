@@ -8,55 +8,62 @@ $(document).ready(async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const pokemonId = urlParams.get('id');
 
-    if(!pokemonId){
+    if (!pokemonId) {
         window.location.href = '../pages/main.html'
     }
+    try {
+        const pokemon = await fns.getPokemon(pokemonId);
+        const pokemonDesc = await fns.getPokemonDesc(pokemon.name);
+        const pokemonLoc = await fns.getPokemonLoc(pokemonId);
+        const evolutionChain = await fns.getPokemonEvolutionChain(pokemonDesc?.evolution_chain.url)
+        var englishEntries = pokemonDesc.flavor_text_entries.map(entry => {
+            return entry?.language?.name === 'en' ? entry?.flavor_text : null
+        }).filter(entry => entry !== null)
+        var rnd = fns.generateRandom(0, englishEntries.length - 1)
 
-    const pokemon = await fns.getPokemon(pokemonId);
-    const pokemonDesc = await fns.getPokemonDesc(pokemon.name);
-    const pokemonLoc = await fns.getPokemonLoc(pokemonId);
-    const evolutionChain = await fns.getPokemonEvolutionChain(pokemonDesc?.evolution_chain.url)
+        const evolve = [
+            evolutionChain.chain?.species?.name,
+            evolutionChain.chain?.evolves_to[0]?.species?.name,
+            evolutionChain.chain?.evolves_to[0]?.evolves_to[0]?.species?.name
+        ];
 
-    const desc = pokemonDesc.flavor_text_entries[0]
-    const engDesc = desc?.language?.name === "en" ? desc?.flavor_text : pokemonDesc?.flavor_text_entries[0 + 1]?.flavor_text;
-    
-    const evolve = [
-        evolutionChain.chain?.species?.name,
-        evolutionChain.chain?.evolves_to[0]?.species?.name,
-        evolutionChain.chain?.evolves_to[0]?.evolves_to[0]?.species?.name
-    ];
+        const evolveIds = await Promise.all(evolve.map(async pokemon => {
+            const result = await fns.getPokemon(pokemon);
+            return result?.id;
+        }));
 
-    const evolveIds = await Promise.all(evolve.map(async pokemon => {
-        const result = await fns.getPokemon(pokemon);
-        return result?.id;
-    }));
+        const filteredEvolve = evolve
+            .map((pokemon, index) => ({ pokemon, id: evolveIds[index] }))
+            .filter(item => item.pokemon !== undefined && item.id !== undefined);
 
-    const filteredEvolve = evolve
-        .map((pokemon, index) => ({ pokemon, id: evolveIds[index] }))
-        .filter(item => item.pokemon !== undefined && item.id !== undefined);
+        const pokemonDetails = {
+            name: pokemon.name,
+            img: pokemon.sprites.other['official-artwork'].front_default,
+            description: englishEntries[rnd].split('\n').join(' ').replace(/\f/g, ' '),
+            id: pokemonDesc.id,
+            abilities: pokemon.abilities.map(ability => fns.toTitleCase(ability.ability.name)).join(', '),
+            type: pokemon.types.map(type => fns.toTitleCase(type.type.name)),
+            color: pokemonDesc.color.name,
+            height: fns.height(pokemon.height),
+            weight: fns.weight(pokemon.weight),
+            location: pokemonLoc.map((location => fns.toTitleCase(location.location_area.name))).join(', '),
+            front: pokemon?.sprites['other']?.showdown.front_default,
+            back: pokemon?.sprites['other']?.showdown.back_default,
+            hp: pokemon.stats[0].base_stat,
+            statAttack: pokemon.stats[1].base_stat,
+            statDefense: pokemon.stats[2].base_stat,
+            statSpeed: pokemon.stats[5].base_stat,
+            evolutionChain: filteredEvolve
+        }
 
-    const pokemonDetails = {
-        name: pokemon.name,
-        img: pokemon.sprites.other['official-artwork'].front_default,
-        description: engDesc.split('\n').join(' ').replace(/\f/g, ' '),
-        id: pokemonDesc.id,
-        abilities: pokemon.abilities.map(ability => fns.toTitleCase(ability.ability.name)).join(', '),
-        type: pokemon.types.map(type => fns.toTitleCase(type.type.name)),
-        color: pokemonDesc.color.name,
-        height: fns.height(pokemon.height),
-        weight: fns.weight(pokemon.weight),
-        location: pokemonLoc.map((location => fns.toTitleCase(location.location_area.name))).join(', '),
-        front: pokemon?.sprites['other']?.showdown.front_default,
-        back: pokemon?.sprites['other']?.showdown.back_default,
-        hp: pokemon.stats[0].base_stat,
-        statAttack: pokemon.stats[1].base_stat,
-        statDefense: pokemon.stats[2].base_stat,
-        statSpeed: pokemon.stats[5].base_stat,
-        evolutionChain: filteredEvolve
+        generateCard(pokemonDetails)
     }
-    
-    generateCard(pokemonDetails)
+    catch (err) {
+        $('#errorMsg').html(`Oops! Something went wrong! Seems like the Pokemon with id ${pokemonId} got some info that is broken. <br> Please go to the next Pokemon`)
+    }
+
     $('#loading-spinner').hide();
+
     $('#nextx').show()
     $('#prevx').show()
     $('#goBack').click(async () => {
@@ -69,22 +76,21 @@ $(document).ready(async function () {
         window.location.href = '../pages/main.html'
     });
     $('#nextx').click(() => {
-        const pokemonIdIncrement = pokemon.id += 1
+        var pokemonIdIncrement = parseInt(pokemonId) + 1;
         window.location.href = `details.html?id=${pokemonIdIncrement}`;
-    })
-    $('#prevx').click(() => {
+    });
 
-        if(pokemon.id > 1){
-            const id = pokemon.id - 1
+    $('#prevx').click(() => {
+        if (parseInt(pokemonId) > 1) {
+            var id = parseInt(pokemonId) - 1;
             window.location.href = `details.html?id=${id}`;
         }
-    })
+    });
 
-    // END OF PAGE
 })
 
 async function addEvolutionChain(chain) {
-    
+
     for (let i = 0; i < chain.length; i++) {
         const pokemon = chain[i];
         const pokemonImg = await fns.getPokemon(pokemon.pokemon);
@@ -102,7 +108,7 @@ async function addEvolutionChain(chain) {
         }
 
         // Attach click event listener directly inside the loop
-        $img.on('click', function() {
+        $img.on('click', function () {
             const clickedId = $(this).attr('id');
             window.location.href = `details.html?id=${pokemon.id}`;
         });
@@ -117,11 +123,11 @@ function generateCard(pokemon) {
     types.forEach(type => {
         const color = fns.colors[type.toLowerCase()] || 'black';
         typeHTML += `<span class="pokemon-type" style="background-color: ${color}; font-size: 1.2em;">${type}</span>`;
-        bColor = color; 
+        bColor = color;
     });
 
     const pokeName = fns.toTitleCase(pokemon.name);
-    
+
     var html = `
     <div class="col">
         <div class="card pokemon-card" style="width: 30rem; background-image: radial-gradient(circle at 50% 0%, ${bColor} 36%, #ffffff 36%);">
@@ -150,7 +156,7 @@ function generateCard(pokemon) {
                 <div class="stats mx-5">
                 </div>
                 <p class="card-text"><span class="fw-bold">Abilities</span> ${pokemon.abilities}</p>
-                <p class="card-text"><span class="fw-bold">Location:</span> ${pokemon.location ? pokemon.location : 'Unknown'}</p>
+                <p class="card-text"><span class="fw-bold">Location:</span> ${pokemon.location ? pokemon.location : 'Unknown. It cant be seen on map'}</p>
     </div>
     </div>
     </div>

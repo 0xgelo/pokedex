@@ -100,7 +100,11 @@ export const fns = {
     clearState : function() {
         var urlWithoutParams = window.location.origin + window.location.pathname;
         history.replaceState({}, document.title, urlWithoutParams);
+    },
+    generateRandom : function (min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+    
 }
 
 export const globalConstants = {

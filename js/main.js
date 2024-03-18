@@ -14,14 +14,10 @@ $(document).ready(async function () {
         fetchPokemonData(pokemonOffset)
         $('.page_btn').text(page)
     }
-
     fns.clearState();
 
     var offset = pokemonOffset? pokemonOffset: 0;
     var pokeCount = 0;
-    if(offset === 0) {
-        
-    }
     offset === 0 ? $('.page_btn').text(Math.floor(offset/20)+1) : $('.page_btn').text(Math.floor(offset/20))
 
     fetchPokemonData(offset);
@@ -36,19 +32,26 @@ $(document).ready(async function () {
             try {
                 const pokemonData = await fns.getPokemon(pokemon.name.toLowerCase());
                 const pokemonDesc = await fns.getPokemonDesc(pokemon.name);
-                const desc = pokemonDesc.flavor_text_entries[0];
-                const engDesc = desc.language.name === "en" ? desc.flavor_text : pokemonDesc.flavor_text_entries[0 + 1].flavor_text;
-
+                var englishEntries = pokemonDesc?.flavor_text_entries
+                ?.map(entry => {
+                    return entry?.language?.name === 'en' ? entry?.flavor_text : null;
+                })
+                .filter(entry => entry !== null);
+            
+            if (englishEntries.length === 0) {
+                englishEntries = ["Nothing to show here"];
+            }
+                    var rnd = fns.generateRandom(0, (englishEntries ?? []).length-1);
                 pokemonDataArray.push({
-                    id: pokemonData.id,
-                    name: pokemonData.name,
-                    img: pokemonData.sprites.other['official-artwork'].front_default,
-                    description: engDesc.split('\n').join(' ').replace(/\f/g, ' '),
-                    type: pokemonData.types.map(type => fns.toTitleCase(type.type.name)),
-                    statAttack: pokemonData.stats[1].base_stat,
-                    statDefense: pokemonData.stats[2].base_stat,
-                    statSpeed: pokemonData.stats[5].base_stat,
-                    hp: pokemonData.stats[0].base_stat,
+                    id: pokemonData.id ?? 0, // Default value for id
+                    name: pokemonData.name ?? "Unknown", // Default value for name
+                    img: pokemonData.sprites.other['official-artwork'].front_default ?? "https://pokeapi.co/media/sprites/items/master-ball.png", // Default value for img
+                    description: (englishEntries[rnd] ?? "No description available").split('\n').join(' ').replace(/\f/g, ' '), // Default value for description
+                    type: pokemonData.types.map(type => fns.toTitleCase(type.type.name)) ?? [], // Default value for type
+                    statAttack: pokemonData.stats[1].base_stat ?? 0, // Default value for statAttack
+                    statDefense: pokemonData.stats[2].base_stat ?? 0, // Default value for statDefense
+                    statSpeed: pokemonData.stats[5].base_stat ?? 0, // Default value for statSpeed
+                    hp: pokemonData.stats[0].base_stat ?? 0 // Default value for hp
                 });
             } catch (error) {
                 console.error(`Error fetching data for ${pokemon.name}:`, error);
@@ -63,10 +66,11 @@ $(document).ready(async function () {
 
     $('.next').click(async function () {
         $('#errorMsg').empty();
-        offset = offset + 20;
+        offset+=20
+        console.log("OFFSET", offset);
         if (offset < pokeCount * 20) {
             $('#card-container').empty();
-            $('.page_btn').text(Math.floor(offset / 20));
+            $('.page_btn').text(offset===20? Math.floor((offset) / 20)+1: Math.floor((offset) / 20));
             $('#loading-spinner').show();
             await fetchPokemonData(offset);
             $('#loading-spinner').hide();
@@ -101,8 +105,8 @@ $(document).ready(async function () {
 
     $('#forward').on('click', async function () {
         $('#loading-spinner').show();
-        const pagenumber = Number($('#forward_input').val())
-        
+        const pagenumber = Number($('#forward_input').val()) ===0? 1 : Number($('#forward_input').val())
+        console.log("PG", pagenumber)
         if(pagenumber < 66){
         offset = pagenumber * 20
         
@@ -122,54 +126,78 @@ $(document).ready(async function () {
         $('#errorMsg').empty();
         const pokemonName = $('#input').val().toLowerCase(); // Store the entered Pokemon name
         const pokemonData = await fns.getPokemon(pokemonName);
-
         if (!pokemonData) {
             $('#errorMsg').text(`No Pokémon found with the name "${pokemonName}"`);
             $('#loading-spinner').hide();
             return;
         }
         else {
-            const pokemonDesc = await fns.getPokemonDesc(pokemonName);
-            const desc = pokemonDesc.flavor_text_entries[0];
-            const engDesc = desc.language.name === "en" ? desc.flavor_text : pokemonDesc.flavor_text_entries[0 + 1].flavor_text;
-
-            const pokemonInfo = {
-                id: pokemonDesc.id,
-                name: pokemonDesc.name,
-                img: pokemonData.sprites.other['official-artwork'].front_default,
-                description: engDesc.split('\n').join(' ').replace(/\f/g, ' '),
-                type: pokemonData.types.map(type => fns.toTitleCase(type.type.name)),
-                hp: pokemonData.stats[0].base_stat,
-                statAttack: pokemonData.stats[1].base_stat,
-                statDefense: pokemonData.stats[2].base_stat,
-                statSpeed:pokemonData.stats[5].base_stat,
-            };
-
-
+            const pokemonInfo = await getPokemonInfo(pokemonData.name)
             const cardHtml = generateCard(pokemonInfo);
             $('#card-container').append(cardHtml);
-
-            $(`#card-${pokemon.id}`).on('click', async function(){
-                window.location.href = `details.html?id=${pokemon.id}`;
-            })
             $('#loading-spinner').hide();
+            $(`#card-${pokemonInfo.id}`).on('click', async function(){
+                window.location.href = `details.html?id=${pokemonInfo.id}`;
+            })
+
         }
 
     });
+
+    $('#random').on('click', async function() {
+        $('#home').show();
+        $('#card-container').empty();
+        $('#loading-spinner').show();
+        $('#errorMsg').empty();
+        var rnd = fns.generateRandom(1, 1032)
+        
+        try {
+            const pokemonInfo = await getPokemonInfo(rnd)
+            const cardHtml = generateCard(pokemonInfo);
+            $('#card-container').append(cardHtml);
+            $('#loading-spinner').hide();
+            $(`#card-${pokemonInfo.id}`).on('click', async function(){
+                window.location.href = `details.html?id=${pokemonInfo.id}`;
+            })
+
+        }catch(error){
+            $('#errorMsg').text('Oops! Something went wrong, Please try to generate again :)')
+            $('#loading-spinner').hide();
+        }
+    })
+    
+    $('#home').on('click', function() {
+        window.location.reload()
+    })
 
     //END OF DOCUMENT.READY
 });
 
 function renderPokemonCards(pokemonDataArray) {
     pokemonDataArray.forEach(function (pokemon) {
-        const cardHtml = generateCard(pokemon);
-        $("#card-container").append(cardHtml);
-
-        $(`#card-${pokemon.id}`).on('click', async function(){
-            window.location.href = `details.html?id=${pokemon.id}`;
-        })
-
+        if (pokemon.id === 0 || pokemon.name === "Unknown" || pokemon.img === "default_image_url") {
+            // Handle the case where data is missing or invalid
+            const cardHtml = generateErrorCard(pokemon); // Create a special error card
+            $("#card-container").append(cardHtml);
+        } else {
+            // Render the regular Pokémon card
+            const cardHtml = generateCard(pokemon);
+            $("#card-container").append(cardHtml);
+        }
     });
+}
+
+function generateErrorCard(pokemon) {
+    return `
+    <div class="col">
+        <div class="card pokemon-card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Error Fetching Pokémon</h5>
+                <p class="card-text">An error occurred while fetching data for this Pokémon.</p>
+            </div>
+        </div>
+    </div>
+    `;
 }
 
 function generateCard(pokemon) {
@@ -181,6 +209,7 @@ function generateCard(pokemon) {
         typeHTML += `<span class="pokemon-type" style="background-color: ${color};">${type}</span>`;
         bColor = color; // Set background color for the card
     });
+    const truncatedDescription = pokemon.description.length > 70 ? pokemon.description.substring(0, 70) + " <i style='color:black;'>...click to see more</i>" : pokemon.description;
 
     const pokeName = fns.toTitleCase(pokemon.name);
     return `
@@ -195,7 +224,7 @@ function generateCard(pokemon) {
             <div class="card-body">
                 <h5 class="card-title">${pokeName}</h5>
                 &emsp; ${typeHTML} &emsp;
-                <p class="card-text mt-2">${pokemon.description}</p>
+                <p class="card-text mt-2">${truncatedDescription}</p>
                 <div class="stats">
                 <div>
                 <h3 class="fw-bold">${pokemon.statAttack}</h3>
@@ -216,4 +245,24 @@ function generateCard(pokemon) {
         
     </div>
     `;
+}
+async function getPokemonInfo(pokemon) {
+    const pokemonData = await fns.getPokemon(pokemon);
+    const pokemonDesc = await fns.getPokemonDesc(pokemon);
+    var englishEntries = pokemonDesc.flavor_text_entries.map(entry => {
+        return entry?.language?.name ==='en'? entry?.flavor_text: null
+    }).filter(entry => entry!== null)
+    var rnd = fns.generateRandom(0, englishEntries.length-1)
+    
+    return {
+        id: pokemonDesc.id,
+        name: pokemonDesc.name,
+        img: pokemonData.sprites.other['official-artwork'].front_default,
+        description: englishEntries[rnd].split('\n').join(' ').replace(/\f/g, ' '),
+        type: pokemonData.types.map(type => fns.toTitleCase(type.type.name)),
+        hp: pokemonData.stats[0].base_stat,
+        statAttack: pokemonData.stats[1].base_stat,
+        statDefense: pokemonData.stats[2].base_stat,
+        statSpeed:pokemonData.stats[5].base_stat,
+    };
 }
