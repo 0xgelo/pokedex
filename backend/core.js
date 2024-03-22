@@ -123,7 +123,7 @@ const getPokemonInfo = async function(pokemon) {
     var rnd = fns.generateRandom(0, englishEntries.length-1)
     
     return {
-        id: pokemonDesc.id > 4 ? pokemonData.name: pokemonDesc.id, // Default value for id
+        id: pokemonDesc.id ?? 0, // Default value for id
         name: pokemonData.name ?? "Unknown", // Default value for name
         img: pokemonData.sprites.other['official-artwork'].front_default ?? "https://pokeapi.co/media/sprites/items/master-ball.png", // Default value for img
         description: (englishEntries[rnd] ?? "No description available").split('\n').join(' ').replace(/\f/g, ' '), // Default value for description

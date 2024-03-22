@@ -26,11 +26,11 @@ $(document).ready(async function () {
     $(document).on('click', '.card', function(){
         var __this = $(this).attr('id').split('-')[1];
         if (__this.length<5){
-            window.location.href = `/pages/details.html?id=${Number(__this)}`
+            window.location.href = `pages/details.html?id=${Number(__this)}`
         }
         else{
             console.log($(this).attr('class').split(' ')[2])
-            window.location.href = `/pages/details.html?id=${String($(this).attr('class').split(' ')[2])}`
+            window.location.href = `pages/details.html?id=${String($(this).attr('class').split(' ')[2])}`
         }
         
     })
