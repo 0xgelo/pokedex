@@ -325,5 +325,26 @@ body {
         flex-direction: row;
         justify-content: center;
     }
-
+    .card-mobile {
+        width: 100%; /* Adjust width to fit mobile screens */
+    }
+    .card-mobile .card-title {
+        font-size: 1.5em; /* Increase font size for card title */
+    }
+    .card-mobile .pokemon-type {
+        font-size: 1em; /* Adjust font size for type labels */
+    }
+    .card-mobile .card-text {
+        font-size: 0.9em; /* Adjust font size for card text */
+    }
+    .card-mobile .stats {
+        margin-top: 1em; /* Add spacing at the top of stats section */
+    }
+    .card-mobile .stats h3 {
+        font-size: 1em; /* Adjust font size for stat numbers */
+    }
+    .card-mobile .stats p {
+        font-size: 0.8em; /* Adjust font size for stat labels */
+    }
+    
 }
