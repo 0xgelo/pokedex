@@ -103,6 +103,16 @@ export const fns = {
     },
     generateRandom : function (min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+    getPokemonByUrl : async function (url) {
+        try {
+            const response = await fetch(url);
+            const pokemon = await response.json();
+            return pokemon;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
     }
     
 }
