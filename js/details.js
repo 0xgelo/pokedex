@@ -6,12 +6,12 @@ $(document).ready(async function () {
     $('#nextx').hide()
     $('#prevx').hide()
     const urlParams = new URLSearchParams(window.location.search);
-    const pokemonId = urlParams.get('id');
-    console.log(pokemonId)
+    const pokemonId = Number(urlParams.get('id'))? Number(urlParams.get('id')) : String(urlParams.get('id'));
+    console.log(typeof(pokemonId))
     if (pokemonId=="") {
         window.location.href = '../pages/main.html'
     }
-    if(typeof(pokemonId)==='number') {
+    if(typeof(pokemonId)=="number") {
         $('#nextx').show()
         $('#prevx').show()
     }
@@ -45,7 +45,7 @@ $(document).ready(async function () {
                 name: pokemon.forms[0].name?? "Pokemon",
                 img: pokemon.sprites.other['official-artwork'].front_default ?? "https://pokeapi.co/media/sprites/items/master-ball.png",
                 description: (englishEntries[rnd] || "No description available").split('\n').join(' ').replace(/\f/g, ' '),
-                id: pokemonDesc.id ?? "0",
+                id: pokemon.id ?? "0",
                 abilities: pokemon.abilities.map(ability => fns.toTitleCase(ability.ability.name) || "No abilities to display").join(', '),
                 type: pokemon.types.map(type => fns.toTitleCase(type.type.name) || "Nothing to display here"),
                 color: pokemonDesc.color.name ?? "Unknown",

@@ -80,7 +80,7 @@ const generateCard = function(pokemon) {
 
     const pokeName = fns.toTitleCase(pokemon.name);
     return `
-    <div class="col">
+    <div class="col d-flex justify-content-center">
         <div class="card pokemon-card ${pokemon.name}" style="width: 18rem; background-image: radial-gradient(circle at 50% 0%, ${bColor} 36%, #ffffff 36%); cursor:pointer;" id="card-${pokemon.id}">
         <p class="hp">
         <span>HP</span>
@@ -123,7 +123,7 @@ const getPokemonInfo = async function(pokemon) {
     var rnd = fns.generateRandom(0, englishEntries.length-1)
     
     return {
-        id: pokemonDesc.id ?? 0, // Default value for id
+        id: pokemonData.id ?? 0, // Default value for id
         name: pokemonData.name ?? "Unknown", // Default value for name
         img: pokemonData.sprites.other['official-artwork'].front_default ?? "https://pokeapi.co/media/sprites/items/master-ball.png", // Default value for img
         description: (englishEntries[rnd] ?? "No description available").split('\n').join(' ').replace(/\f/g, ' '), // Default value for description
@@ -151,7 +151,7 @@ const generateCardDetails = function(pokemon) {
 
     var html = `
     <div class="col">
-        <div class="card pokemon-card" style="width: 30rem; background-image: radial-gradient(circle at 50% 0%, ${bColor} 36%, #ffffff 36%);">
+        <div class="card pokemon-card card-mobile" style="width: 30rem; background-image: radial-gradient(circle at 50% 0%, ${bColor} 36%, #ffffff 36%);">
         <p class="hp">
         <span>HP</span>
             ${pokemon.hp}

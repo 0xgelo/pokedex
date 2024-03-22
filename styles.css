@@ -289,3 +289,35 @@ body {
     position:relative;
     top: 50rem;
 }
+
+/* Styles for screens with a maximum width of 768 pixels (typical for tablets and mobile devices) */
+@media only screen and (max-width: 768px) {
+    
+    body {
+        font-size: 14px;
+    }
+    
+    .header {
+        padding: 10px;
+    }
+    /* .pagination,
+    #card-container{
+        display: none;
+    } */
+    .pokedexLogo {
+        width: 70vw;
+    }
+    #random,
+    #input {
+        width: 60vw !important;
+    }
+
+    .card-mobile {
+        width: 20rem !important;
+        
+    }
+    #prevx,
+    #nextx {
+        display: none !important;
+    }
+}
