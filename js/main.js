@@ -26,11 +26,11 @@ $(document).ready(async function () {
     $(document).on('click', '.card', function(){
         var __this = $(this).attr('id').split('-')[1];
         if (__this.length<5){
-            window.location.href = `pokedex/pages/details.html?id=${Number(__this)}`
+            window.location.href = `./pages/details.html?id=${Number(__this)}`
         }
         else{
             console.log($(this).attr('class').split(' ')[2])
-            window.location.href = `pokedex/details.html?id=${String($(this).attr('class').split(' ')[2])}`
+            window.location.href = `./pages/details.html?id=${String($(this).attr('class').split(' ')[2])}`
         }
         
     })
@@ -106,7 +106,7 @@ $(document).ready(async function () {
             $('#card-container').append(cardHtml);
             $('#loading-spinner').hide();
             $(`#card-${pokemonInfo.id}`).on('click', async function(){
-                window.location.href = `pokedex/pages/details.html?id=${pokemonInfo.id}`;
+                window.location.href = `./pages/details.html?id=${pokemonInfo.id}`;
             })
 
         }
@@ -127,7 +127,7 @@ $(document).ready(async function () {
             $('#loading-spinner').hide();
             
             $(`#card-${pokemonInfo.id}`).on('click', async function(){
-                window.location.href = `pokedex/pages/details.html?id=${pokemonInfo.id}`;
+                window.location.href = `./pages/details.html?id=${pokemonInfo.id}`;
             })
 
         }catch(error){

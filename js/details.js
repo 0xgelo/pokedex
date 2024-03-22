@@ -69,21 +69,21 @@ $(document).ready(async function () {
     $('#goBack').click(async () => {
         var offset = localStorage.getItem('offset')
         var page_number = localStorage.getItem('page_number')
-        window.location.href = `pokedex/pages/main.html?offset=${offset}&page=${page_number}`;
+        window.location.href = `./pages/main.html?offset=${offset}&page=${page_number}`;
     })
 
     $('#home').click(() => {
-        window.location.href = 'pokedex/pages/main.html'
+        window.location.href = './pages/main.html'
     });
     $('#nextx').click(() => {
         var pokemonIdIncrement = parseInt(pokemonId) + 1;
-        window.location.href = `pokedex/pages/details.html?id=${pokemonIdIncrement}`;
+        window.location.href = `./pages/details.html?id=${pokemonIdIncrement}`;
     });
 
     $('#prevx').click(() => {
         if (parseInt(pokemonId) > 1) {
             var id = parseInt(pokemonId) - 1;
-            window.location.href = `pokedex/pages/details.html?id=${id}`;
+            window.location.href = `./pages/details.html?id=${id}`;
         }
     });
 
