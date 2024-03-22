@@ -13,30 +13,63 @@
     <link rel="stylesheet" href="../styles.css">
     <link href="../assets/favicon.ico" rel="icon" type="image/x-icon">
     <script src="https://kit.fontawesome.com/1cb1626a1b.js" crossorigin="anonymous"></script>
+    <style>
+        /* Custom CSS for additional styling */
+        /* Reduce padding for small devices */
+        .navbar-nav {
+            padding-top: 0.5rem;
+        }
+        /* Adjust margins for small devices */
+        .navbar-brand,
+        .nav-link {
+            margin: 0.25rem;
+        }
+        /* Center the navbar items on small devices */
+        @media (max-width: 768px) {
+            .navbar-nav {
+                justify-content: center;
+            }
+            .navbar-brand {
+                margin-right: auto;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand ms-5" href="./main.html">
+                <img src="../assets/logo.svg" height="40" alt="Pokedex Logo">
+            </a>
+            <!-- Hamburger Icon for mobile -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Navbar Items -->
+            <div class="collapse navbar-collapse me-5" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <input type="text" id="input" class="form-control" placeholder="Enter Pokémon name or ID">
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-secondary me-2" id="go">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-secondary" id="random">
+                        <i class="fas fa-dice"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
-        <!-- Header -->
-        <div class="d-flex justify-content-center">
-            <img src="../assets/logo.svg" class="pokedexLogo" sty>
-        </div>
-
-        <!-- Search Input -->
-        <div class="input-container">
-            <input type="text" id="input" placeholder="Enter Pokémon name or ID" style="width: 30%; padding: 10px;"
-                class="me-2">
-            <button type="button" class="btn btn-outline-secondary" id="go"><i class="fa-solid fa-magnifying-glass"></i></button>
-        </div>
-        
-        <div class="d-flex justify-content-center">
-            <button type="button" class="btn btn-outline-secondary me-2" id="random">Generate Random<i class="ms-1 fa-solid fa-dice"></i></button>
-            <button id="home" class="btn btn-outline-secondary"><i class="fa-solid fa-house"></i></i></button>
-        </div>
-        <div class="d-flex justify-content-center">
-            <p id="errorMsg"></p>
-        </div>
-
         <!-- Loading Spinner -->
         <div class="loading-container">
             <div id="loading-spinner" class="text-center mb-4">
@@ -96,6 +129,9 @@
             <p class="text-muted">Powered by <a href="https://pokeapi.co/" target="_blank">PokeAPI</a></p>
         </div>
     </footer>
+    <!-- Bootstrap JS (Optional, if you're using Bootstrap features like collapse) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script src="../js/main.js" type="module"></script>
 </body>
 

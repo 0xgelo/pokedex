@@ -93,23 +93,31 @@ $(document).ready(async function () {
         $('#loading-spinner').show();
         $('#errorMsg').empty();
         const pokemonName = $('#input').val().toLowerCase(); // Store the entered Pokemon name
-        const pokemonData = await fns.getPokemon(pokemonName);
-        console.log(pokemonData)
-        if (!pokemonData) {
-            $('#errorMsg').text(`No Pokémon found with the name "${pokemonName}"`);
-            $('#loading-spinner').hide();
-            return;
+        console.log("pokemon", pokemonName)
+        if(pokemonName !== "") {
+            const pokemonData = await fns.getPokemon(pokemonName);
+            console.log(pokemonData)
+            if (!pokemonData) {
+                $('#errorMsg').text(`No Pokémon found with the name "${pokemonName}"`);
+                $('#loading-spinner').hide();
+                return;
+            }
+            else {
+                const pokemonInfo = await getPokemonInfo(pokemonData.name)
+                const cardHtml = generateCard(pokemonInfo);
+                $('#card-container').append(cardHtml);
+                $('#loading-spinner').hide();
+                $(`#card-${pokemonInfo.id}`).on('click', async function(){
+                    window.location.href = `../pages/details.html?id=${pokemonInfo.id}`;
+                })
+    
+            }
         }
         else {
-            const pokemonInfo = await getPokemonInfo(pokemonData.name)
-            const cardHtml = generateCard(pokemonInfo);
-            $('#card-container').append(cardHtml);
             $('#loading-spinner').hide();
-            $(`#card-${pokemonInfo.id}`).on('click', async function(){
-                window.location.href = `../pages/details.html?id=${pokemonInfo.id}`;
-            })
-
+            $('#errorMsg').text(`Please enter a valid pokemon name`);
         }
+
 
     });
 
