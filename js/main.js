@@ -106,7 +106,7 @@ $(document).ready(async function () {
             $('#card-container').append(cardHtml);
             $('#loading-spinner').hide();
             $(`#card-${pokemonInfo.id}`).on('click', async function(){
-                window.location.href = `details.html?id=${pokemonInfo.id}`;
+                window.location.href = `../pages/details.html?id=${pokemonInfo.id}`;
             })
 
         }
@@ -127,7 +127,7 @@ $(document).ready(async function () {
             $('#loading-spinner').hide();
             
             $(`#card-${pokemonInfo.id}`).on('click', async function(){
-                window.location.href = `details.html?id=${pokemonInfo.id}`;
+                window.location.href = `../pages/details.html?id=${pokemonInfo.id}`;
             })
 
         }catch(error){

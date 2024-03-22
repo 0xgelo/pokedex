@@ -77,13 +77,13 @@ $(document).ready(async function () {
     });
     $('#nextx').click(() => {
         var pokemonIdIncrement = parseInt(pokemonId) + 1;
-        window.location.href = `details.html?id=${pokemonIdIncrement}`;
+        window.location.href = `../pages/details.html?id=${pokemonIdIncrement}`;
     });
 
     $('#prevx').click(() => {
         if (parseInt(pokemonId) > 1) {
             var id = parseInt(pokemonId) - 1;
-            window.location.href = `details.html?id=${id}`;
+            window.location.href = `../pages/details.html?id=${id}`;
         }
     });
 
