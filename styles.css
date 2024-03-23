@@ -5,21 +5,26 @@
         url('./assets/font/Pokemon_Solid.ttf') format('woff2');
 }
 #input {
-    width: 50vw !important;
+    width: 30vw !important;
     height: 5vh;
     margin-right: .5vw;
 }
 .pokemon-details-h1 {
-    color: #333 !important;
+    color: white !important;
     font-family: 'PokeFont', sans-serif;
     
 }
 
 body {
     font-family: 'Courier New', Courier, monospace;
-    background-color: #f0f0f0;
+    /* background: radial-gradient(circle, #31363F 0%, #31363F 20%, #222831 100%); */
+    margin: 0;
+    background: #424242 url(https://assets.pokemon.com/static2/_ui/img/chrome/body_bg.png);;
+    
 }
-
+.navbar {
+    background: transparent !important;
+}
 .page-link {
     display: inline-block;
     margin-right: 5px;
@@ -76,6 +81,9 @@ body {
     color: #666;
     margin-bottom: 20px;
 }
+.navbar-toggler {
+    background-color: white;
+}
 
 /* Input field */
 #input {
@@ -84,7 +92,8 @@ body {
     padding: 8px 12px; /* Padding inside the input field */
     font-size: 16px; /* Font size */
     outline: none; /* Remove outline on focus */
-    transition: border-color 0.3s; /* Smooth transition for border color */
+    transition: border-color 0.3s;
+
 }
 
 #input:focus {
@@ -95,7 +104,7 @@ body {
 .btn-outline-secondary {
     color: #333;
     border: 2px solid #2a75bb;
-    background-color: transparent;
+    background-color: white;
     border-radius: 8px;
     padding: 10px 20px;
     font-size: 16px;
@@ -209,7 +218,7 @@ body {
 .footer .social-icons a {
     font-size: 24px;
     margin: 0 10px;
-    color: black;
+    color: white;
     transition: all 0.3s ease;
 }
 
@@ -308,9 +317,9 @@ body {
         width: 70vw;
     }
     #input {
-        width: 50vw !important;
-        height: 5.4vh;
-        margin-right: .5vw;
+        height: auto;
+        margin-right: 2px;
+        margin-left: 20px;
     }
 
     .card-mobile {
@@ -347,5 +356,7 @@ body {
     .card-mobile .stats p {
         font-size: 0.8em; /* Adjust font size for stat labels */
     }
-
+    .evolveImg {
+        width: 60px;
+    }
 }

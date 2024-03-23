@@ -41,7 +41,7 @@
         <div class="container-fluid">
             <!-- Logo -->
             <a class="navbar-brand ms-5" href="./main.html">
-                <img src="../assets/logo.svg" height="40" alt="Pokedex Logo">
+                <img src="../assets/logo.png" class="" alt="Pokedex Logo">
             </a>
             <!-- Hamburger Icon for mobile -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -50,7 +50,7 @@
             </button>
             <!-- Navbar Items -->
             <div class="collapse navbar-collapse me-5" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto d-flex align-items-center">
                     <li class="nav-item">
                         <input type="text" id="input" class="form-control" placeholder="Enter Pokémon name or ID">
                     </li>
@@ -60,10 +60,14 @@
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button class="btn btn-outline-secondary" id="random">
+                        <button class="btn btn-outline-secondary me-2" id="random">
                         <i class="fas fa-dice"></i>
                         </button>
                     </li>
+                    <li class="nav-item">
+                        <button id="home" class="btn btn-outline-secondary"><i class="fa-solid fa-house"></i>
+                        </button></li>
+                    
                 </ul>
             </div>
         </div>
@@ -102,7 +106,7 @@
                     </a>
                 </li>
                 <li class="d-flex justify-content-center align-items-center me-2">
-                    <label class="fw-bold" style="color: black;"> Jump to: </label> 
+                    <label class="fw-bold" style="color: white;"> Jump to: </label> 
                 </li>
                 <li class="d-flex justify-content-center me-2">
                     <input type="number" id="forward_input" style="width: 50px;" placeholder="1" min="1" max="66" >
@@ -119,14 +123,14 @@
 
     <footer class="footer">
         <div class="container text-center">
-            <p class="text-muted" >&copy; 2024 Pokedex. All rights reserved.</p>
-            <p class="text-muted">Designed and Developed by An.gxlo.r </p>
+            <p class="text" style="color: white;">&copy; 2024 Pokedex. All rights reserved.</p>
+            <p class="text" style="color: white;">Designed and Developed by An.gxlo.r </p>
             <div class="social-icons">
                 <a href="https://github.com/0xgelo" target="_blank"><i class="fab fa-github"></i></a>
                 <a href="https://instagram.com/an.gxlo.roz" target="_blank"><i class="fab fa-instagram"></i></a>
                 <a href="https://twitter.com/0xgelox" target="_blank"><i class="fab fa-twitter"></i></a>
             </div>
-            <p class="text-muted">Powered by <a href="https://pokeapi.co/" target="_blank">PokeAPI</a></p>
+            <p class="text" style="color: white;">Powered by <a href="https://pokeapi.co/" target="_blank">PokeAPI</a></p>
         </div>
     </footer>
     <!-- Bootstrap JS (Optional, if you're using Bootstrap features like collapse) -->

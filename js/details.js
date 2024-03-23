@@ -11,10 +11,7 @@ $(document).ready(async function () {
     if (pokemonId=="") {
         window.location.href = '../pages/main.html'
     }
-    if(typeof(pokemonId)=="number") {
-        $('#nextx').show()
-        $('#prevx').show()
-    }
+
     
         const pokemon = await fns.getPokemon(pokemonId);
         console.log(pokemon.forms)
@@ -65,7 +62,10 @@ $(document).ready(async function () {
         generateCardDetails(pokemonDetails)
 
     $('#loading-spinner').hide();
-
+    if(typeof(pokemonId)=="number") {
+        $('#nextx').show()
+        $('#prevx').show()
+    }
     $('#goBack').click(async () => {
         var offset = localStorage.getItem('offset')
         var page_number = localStorage.getItem('page_number')

@@ -1,7 +1,7 @@
 import { fns } from '../js/constants.js';
 
 const fetchPokemonData = async function(offset) {
-    var pokeEndpoint = `https://pokeapi.co/api/v2/pokemon/?limit=20&offset=${offset}`;
+    var pokeEndpoint = `https://pokeapi.co/api/v2/pokemon/?limit=4&offset=${offset}`;
     var result = await fns.getPokemonAll(pokeEndpoint);
     const pokemonDataArray = [];
     await Promise.all(result.results.map(async function (pokemon) {
@@ -20,7 +20,7 @@ const fetchPokemonData = async function(offset) {
         }
                 var rnd = fns.generateRandom(0, (englishEntries ?? []).length-1);
             pokemonDataArray.push({
-                id: pokemonData.id ?? 0, // Default value for id
+                id: formatID(pokemonData.id) ?? 0, // Default value for id
                 name: pokemonData.name ?? "Unknown", // Default value for name
                 img: pokemonData.sprites.other['official-artwork'].front_default ?? "https://pokeapi.co/media/sprites/items/master-ball.png", // Default value for img
                 description: (englishEntries[rnd] || "No description available").split('\n').join(' ').replace(/\f/g, ' '),
@@ -86,13 +86,12 @@ const generateCard = function(pokemon) {
         <span>HP</span>
             ${pokemon.hp}
         </p>
-        <div class="card-suit" style="color: white;">#${pokemon.id}</div>
             <img src="${pokemon.img}" class="card-img-top" alt="${pokeName}">
             <div class="card-body">
                 <h5 class="card-title">${pokeName}</h5>
+                <p class="fw-bold">#${pokemon.id}</p>
                 &emsp; ${typeHTML} &emsp;
-                <p class="card-text mt-2">${truncatedDescription}</p>
-                <div class="stats">
+                <div class="stats mt-2">
                 <div>
                 <h3 class="fw-bold">${pokemon.statAttack}</h3>
                 <p>Attack</p>
@@ -123,7 +122,7 @@ const getPokemonInfo = async function(pokemon) {
     var rnd = fns.generateRandom(0, englishEntries.length-1)
     
     return {
-        id: pokemonData.id ?? 0, // Default value for id
+        id: formatID(pokemonData.id) ?? 0, // Default value for id
         name: pokemonData.name ?? "Unknown", // Default value for name
         img: pokemonData.sprites.other['official-artwork'].front_default ?? "https://pokeapi.co/media/sprites/items/master-ball.png", // Default value for img
         description: (englishEntries[rnd] ?? "No description available").split('\n').join(' ').replace(/\f/g, ' '), // Default value for description
@@ -214,6 +213,12 @@ const addEvolutionChain= async function(chain) {
             window.location.href = `details.html?id=${pokemon.id}`;
         });
     }
+}
+function formatID(id) {
+    return String(id).padStart(5, '0');
+}
+function unformatID(formattedID) {
+    return parseInt(formattedID, 10);
 }
 
 export {

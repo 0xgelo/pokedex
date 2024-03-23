@@ -18,17 +18,17 @@ $(document).ready(async function () {
 
     var offset = pokemonOffset? pokemonOffset: 0;
     var pokeCount = 0;
-    $('.page_btn').text(Math.floor(offset/20)+1)
+    $('.page_btn').text(Math.floor(offset/4)+1)
 
     fetchPokemonData(offset);
     localStorage.setItem('offset', offset);
 
     $(document).on('click', '.card', function(){
-        var __this = $(this).attr('id').split('-')[1];
-        if (__this.length<5){
+        var __this = unformatID($(this).attr('id').split('-')[1]);
+        if (__this){
             window.location.href = `../pages/details.html?id=${__this}`
         }
-        else{
+        else if(__this ==="null"){
             console.log($(this).attr('class').split(' ')[2])
             window.location.href = `../pages/details.html?id=${$(this).attr('class').split(' ')[2]}`
         }
@@ -37,14 +37,14 @@ $(document).ready(async function () {
 
     $('.next').click(async function () {
         $('#errorMsg').empty();
-        offset+=20
+        offset+=4
         $('#card-container').empty();
-        $('.page_btn').text(Math.floor(offset / 20) +1 );
-        console.log("PAGE",  Math.floor(offset / 20) +1);
+        $('.page_btn').text(Math.floor(offset / 4) +1 );
+        console.log("PAGE",  Math.floor(offset / 4) +1);
         $('#loading-spinner').show();
         await fetchPokemonData(offset);
         $('#loading-spinner').hide();
-        localStorage.setItem('page_number', Math.floor(offset / 20) +1 );
+        localStorage.setItem('page_number', Math.floor(offset / 4) +1 );
         localStorage.setItem('offset', offset);
     });
 
@@ -52,14 +52,14 @@ $(document).ready(async function () {
     $('.prev').click(async function () {
         $('#errorMsg').empty();
         if (offset > 1) {
-            offset -= 20;
+            offset -= 4;
             $('#card-container').empty();
-            $('.page_btn').text(Math.floor(offset / 20)+1);
+            $('.page_btn').text(Math.floor(offset / 4)+1);
             $('#loading-spinner').show();
             await fetchPokemonData(offset);
             $('#loading-spinner').hide();
             localStorage.setItem('offset', offset);
-            localStorage.setItem('page_number', Math.floor(offset / 20)+1);
+            localStorage.setItem('page_number', Math.floor(offset / 4)+1);
         }
     });
 
@@ -76,12 +76,12 @@ $(document).ready(async function () {
         const pagenumber = Number($('#forward_input').val()) ===0? 1 : Number($('#forward_input').val())
         console.log("PG", pagenumber)
         if(pagenumber < 66){
-        offset = pagenumber * 20
+        offset = pagenumber * 4
         
         $('#card-container').empty();
         fetchPokemonData(offset)
-        $('.page_btn').text(Math.floor(offset / 20));
-        localStorage.setItem('page_number', Math.floor(offset / 20));
+        $('.page_btn').text(Math.floor(offset / 4));
+        localStorage.setItem('page_number', Math.floor(offset / 4));
         localStorage.setItem('offset', offset)
         }
 
@@ -145,8 +145,13 @@ $(document).ready(async function () {
     })
     
     $('#home').on('click', function() {
-        window.location.reload()
+        window.location.href = '../pages/main.html'
     })
 
     //END OF DOCUMENT.READY
 });
+
+function unformatID(formattedID) {
+    const unformatted = parseInt(formattedID, 10);
+    return isNaN(unformatted) ? null : unformatted;
+}
