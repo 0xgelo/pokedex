@@ -7,14 +7,10 @@ $(document).ready(async function () {
     $('#prevx').hide()
     const urlParams = new URLSearchParams(window.location.search);
     const pokemonId = Number(urlParams.get('id'))? Number(urlParams.get('id')) : String(urlParams.get('id'));
-    console.log(typeof(pokemonId))
     if (pokemonId=="") {
         window.location.href = '../pages/main.html'
     }
-
-    
         const pokemon = await fns.getPokemon(pokemonId);
-        console.log(pokemon.forms)
         const pokemonDesc = await fns.getPokemonDesc(pokemon.species.name);
         const pokemonLoc = await fns.getPokemonLoc(pokemonId);
         const evolutionChain = await fns.getPokemonEvolutionChain(pokemonDesc?.evolution_chain.url)

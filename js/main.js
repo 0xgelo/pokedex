@@ -8,7 +8,6 @@ $(document).ready(async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const pokemonOffset = Number(urlParams.get('offset'));
     const page = Number(urlParams.get('page_number'));
-    console.log(window.location.pathname)
     if (pokemonOffset) {
         $('#card-container').empty();
         fetchPokemonData(pokemonOffset)
@@ -29,7 +28,6 @@ $(document).ready(async function () {
             window.location.href = `../pages/details.html?id=${__this}`
         }
         else if(__this ==="null"){
-            console.log($(this).attr('class').split(' ')[2])
             window.location.href = `../pages/details.html?id=${$(this).attr('class').split(' ')[2]}`
         }
         
@@ -40,7 +38,6 @@ $(document).ready(async function () {
         offset+=4
         $('#card-container').empty();
         $('.page_btn').text(Math.floor(offset / 4) +1 );
-        console.log("PAGE",  Math.floor(offset / 4) +1);
         $('#loading-spinner').show();
         await fetchPokemonData(offset);
         $('#loading-spinner').hide();
@@ -74,7 +71,6 @@ $(document).ready(async function () {
     $('#forward').on('click', async function () {
         $('#loading-spinner').show();
         const pagenumber = Number($('#forward_input').val()) ===0? 1 : Number($('#forward_input').val())
-        console.log("PG", pagenumber)
         if(pagenumber < 66){
         offset = pagenumber * 4
         
@@ -93,10 +89,8 @@ $(document).ready(async function () {
         $('#loading-spinner').show();
         $('#errorMsg').empty();
         const pokemonName = $('#input').val().toLowerCase(); // Store the entered Pokemon name
-        console.log("pokemon", pokemonName)
         if(pokemonName !== "") {
             const pokemonData = await fns.getPokemon(pokemonName);
-            console.log(pokemonData)
             if (!pokemonData) {
                 $('#errorMsg').text(`No Pokémon found with the name "${pokemonName}"`);
                 $('#loading-spinner').hide();
