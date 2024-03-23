@@ -307,9 +307,10 @@ body {
     .pokedexLogo {
         width: 70vw;
     }
-    #random,
     #input {
-        width: 30vw !important;
+        width: 50vw !important;
+        height: 5.4vh;
+        margin-right: .5vw;
     }
 
     .card-mobile {
@@ -346,5 +347,5 @@ body {
     .card-mobile .stats p {
         font-size: 0.8em; /* Adjust font size for stat labels */
     }
-    
+
 }
