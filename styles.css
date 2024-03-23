@@ -1,10 +1,14 @@
 @font-face {
     font-family: 'PokeFont';
     src: url('./assets/font/Pokemon_Solid.ttf') format('truetype'),
-        url('fonts/YourCustomFont.woff') format('woff'),
-        url('fonts/YourCustomFont.woff2') format('woff2');
+        url('./assets/font/Pokemon_Solid.ttf') format('woff'),
+        url('./assets/font/Pokemon_Solid.ttf') format('woff2');
 }
-
+#input {
+    width: 50vw !important;
+    height: 5vh;
+    margin-right: .5vw;
+}
 .pokemon-details-h1 {
     color: #333 !important;
     font-family: 'PokeFont', sans-serif;
@@ -300,10 +304,6 @@ body {
     .header {
         padding: 10px;
     }
-    /* .pagination,
-    #card-container{
-        display: none;
-    } */
     .pokedexLogo {
         width: 70vw;
     }
